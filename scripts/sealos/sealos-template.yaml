@@ -48,14 +48,14 @@ spec:
       type: string
       default: 'Data Source=/data/opendeepwiki.db'
       required: true
-    
+
     # JWT 配置
     jwt_secret_key:
       description: 'JWT 密钥（生产环境请务必修改）'
       type: string
       default: 'OpenDeepWiki-Default-Secret-Key-Please-Change-In-Production-Environment-2024'
       required: true
-    
+
     # 全局 AI 配置（用于 Chat 等功能）
     chat_api_key:
       description: 'Chat API Key'
@@ -72,7 +72,7 @@ spec:
       type: string
       default: 'OpenAI'
       required: true
-    
+
     # Wiki 目录生成配置
     wiki_catalog_model:
       description: 'Wiki 目录生成模型'
@@ -94,7 +94,7 @@ spec:
       type: string
       default: 'OpenAI'
       required: true
-    
+
     # Wiki 内容生成配置
     wiki_content_model:
       description: 'Wiki 内容生成模型'
@@ -116,7 +116,7 @@ spec:
       type: string
       default: 'OpenAI'
       required: true
-    
+
     # Wiki 生成配置
     wiki_parallel_count:
       description: 'Wiki 生成并行数'
@@ -128,7 +128,7 @@ spec:
       type: string
       default: 'en,zh'
       required: true
-    
+
     # 存储配置
     volume_size_data:
       description: '数据存储容量 (Gi)'
@@ -141,7 +141,7 @@ kind: StatefulSet
 metadata:
   name: ${{ defaults.app_name }}
   annotations:
-    originImageName: crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/open-deepwiki/opendeepwiki
+    originImageName: almirai/opendeepwiki
     deploy.cloud.sealos.io/minReplicas: '1'
     deploy.cloud.sealos.io/maxReplicas: '1'
   labels:
@@ -168,28 +168,28 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: ${{ defaults.app_name }}
-          image: crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/open-deepwiki/opendeepwiki
+          image: almirai/opendeepwiki
           env:
             # ASP.NET Core 环境
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
             - name: URLS
               value: http://+:8080
-            
+
             # 数据库配置
             - name: DB_TYPE
               value: ${{ inputs.db_type }}
             - name: CONNECTION_STRING
               value: ${{ inputs.connection_string }}
-            
+
             # JWT 认证配置
             - name: JWT_SECRET_KEY
               value: ${{ inputs.jwt_secret_key }}
-            
+
             # 仓库存储目录
             - name: REPOSITORIES_DIRECTORY
               value: /data
-            
+
             # AI 服务配置（全局默认，用于 Chat 等功能）
             - name: CHAT_API_KEY
               value: ${{ inputs.chat_api_key }}
@@ -197,7 +197,7 @@ spec:
               value: ${{ inputs.chat_endpoint }}
             - name: CHAT_REQUEST_TYPE
               value: ${{ inputs.chat_request_type }}
-            
+
             # Wiki 生成器配置 - 目录生成
             - name: WIKI_CATALOG_MODEL
               value: ${{ inputs.wiki_catalog_model }}
@@ -207,7 +207,7 @@ spec:
               value: ${{ inputs.wiki_catalog_api_key }}
             - name: WIKI_CATALOG_REQUEST_TYPE
               value: ${{ inputs.wiki_catalog_request_type }}
-            
+
             # Wiki 生成器配置 - 内容生成
             - name: WIKI_CONTENT_MODEL
               value: ${{ inputs.wiki_content_model }}
@@ -217,7 +217,7 @@ spec:
               value: ${{ inputs.wiki_content_api_key }}
             - name: WIKI_CONTENT_REQUEST_TYPE
               value: ${{ inputs.wiki_content_request_type }}
-            
+
             # Wiki 生成配置
             - name: WIKI_PARALLEL_COUNT
               value: ${{ inputs.wiki_parallel_count }}
@@ -343,7 +343,7 @@ kind: Deployment
 metadata:
   name: ${{ defaults.web_name }}
   annotations:
-    originImageName: crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/open-deepwiki/opendeepwiki-web
+    originImageName: almirai/opendeepwiki-web
     deploy.cloud.sealos.io/minReplicas: '1'
     deploy.cloud.sealos.io/maxReplicas: '1'
   labels:
@@ -368,7 +368,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: ${{ defaults.web_name }}
-          image: crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/open-deepwiki/opendeepwiki-web
+          image: almirai/opendeepwiki-web
           env:
             - name: NODE_ENV
               value: production

@@ -37,7 +37,7 @@ docker-compose up -d
 ```yaml
 services:
   opendeepwiki:
-    image: crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/open-deepwiki/opendeepwiki
+    image: almirai/opendeepwiki
     build:
       context: .
       dockerfile: src/OpenDeepWiki/Dockerfile
@@ -96,7 +96,7 @@ services:
       - ./data:/data
 
   web:
-    image: crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/open-deepwiki/opendeepwiki-web
+    image: almirai/opendeepwiki-web
     build:
       context: ./web
       dockerfile: Dockerfile
