@@ -12,12 +12,14 @@ public static class DatabaseServiceExtensions
     /// </summary>
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        var dbType = configuration.GetValue<string>("Database:Type")?.ToLowerInvariant()
-            ?? Environment.GetEnvironmentVariable("DB_TYPE")?.ToLowerInvariant()
+        var dbType = Environment.GetEnvironmentVariable("DB_TYPE")?.ToLowerInvariant()
+            ?? Environment.GetEnvironmentVariable("Database__Type")?.ToLowerInvariant()
+            ??configuration.GetValue<string>("Database:Type")?.ToLowerInvariant()
             ?? "sqlite";
 
-        var connectionString = configuration.GetConnectionString("Default")
-            ?? Environment.GetEnvironmentVariable("CONNECTION_STRING")
+        var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
+            ?? Environment.GetEnvironmentVariable("ConnectionStrings__Default")
+            ?? configuration.GetConnectionString("Default")
             ?? GetDefaultConnectionString(dbType);
 
         return dbType switch
